@@ -124,16 +124,24 @@ def calculateSimilarItems(prefs,n=10):
         result[item]=scores
     return result
 
-def loadMovieLens(path='/data/movielens'):
+def loadMovieLens(path='./data/movielens'):
     # Get movie titles
     movies={}
-    for line in open(path+'/u.item'):
-        (id,title)=line.split('|')[0:2]
+    count = 0
+    for line in open(path+'/movies.csv'):
+        if count==0:
+            count += 1
+            continue
+        (id,title)=line.split(',')[0:2]
         movies[id]=title
     # Load data
     prefs={}
-    for line in open(path+'/u.data'):
-        (user,movieid,rating,ts)=line.split('\t')
+    count = 0
+    for line in open(path+'/ratings.csv'):
+        if count==0:
+            count += 1
+            continue
+        (user,movieid,rating,ts)=line.split(',')
         prefs.setdefault(user,{})
         prefs[user][movies[movieid]]=float(rating)
-return prefs
+    return prefs
