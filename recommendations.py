@@ -33,7 +33,7 @@ def sim_distance(prefs,person1,person2):
     sum_of_squares=sum([pow(prefs[person1][item]-prefs[person2][item],2)
                       for item in prefs[person1] if item in prefs[person2]])
     return 1/(1+sum_of_squares)
-        
+
 # Returns the Pearson correlation coefficient for p1 and p2
 def sim_pearson(prefs,p1,p2):
     # Get the list of mutually rated items
@@ -58,3 +58,12 @@ def sim_pearson(prefs,p1,p2):
     if den==0: return 0
     r=num/den
 return r
+
+# Returns the best matches for person from the prefs dictionary.
+# Number of results and similarity function are optional params.
+def topMatches(prefs,person,n=5,similarity=sim_pearson):
+    scores=[(similarity(prefs,person,other),other) for other in prefs if other!=person]
+    # Sort the list so the highest scores appear at the top
+    scores.sort()
+    scores.reverse()
+    return scores[0:n]
